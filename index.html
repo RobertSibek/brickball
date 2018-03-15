@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf8" http-equiv="encoding"> </head>
+		
+		
+<script>
+	
+	// Constants
+	const CANVAS_WIDTH = 800;
+	const CANVAS_HEIGHT = 600;
+	const PADDLE_WIDTH = 100;
+	const PADDLE_THICKNESS = 10;
+	const PADDLE_DIST_FROM_EDGE = 15;
+	const BRICK_W = 80;
+	const BRICK_H = 20;
+	const BRICK_COLS = 10;
+	const BRICK_ROWS = 14;
+	const BRICK_GAP = 2;
+	const BALL_RADIUS = 10;
+	const BALL_STARTING_SPEED = 1;
+	
+	// Variables
+	var canvas, canvasContext;
+	var ballSpeedX = BALL_STARTING_SPEED;
+	var ballSpeedY = BALL_STARTING_SPEED;
+	var paddleX = (CANVAS_WIDTH / 2) - PADDLE_WIDTH / 2;
+	var ballX = CANVAS_WIDTH / 2 - BALL_RADIUS;
+	var ballY = CANVAS_HEIGHT - PADDLE_DIST_FROM_EDGE;
+	var mouseX;
+	var mouseY;
+	var clRed = 255;
+	var clGreen = 0;
+	var clBlue = 0;
+	var paddle_color = "rgba(" + clRed + "," + clGreen + "," + clBlue + ", 0.5)";
+	var brickGrid = new Array(BRICK_COLS * BRICK_ROWS);
+	var isPlaying = false;	
+	
+</script>		
+
+
+	<body>
+		
+		<!-- Draw canvas object-->
+		<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+		<!-- Import source files-->
+<!--		<script src="js/common.js"></script>-->
+		<script src="js/main.js"></script>
+		<script src="js/input.js"></script>
+		<script src="js/graphic-common.js"></script>
+		<script src="js/player.js"></script>
+		<script src="js/ball.js"></script>
+		<script src="js/bricks.js"></script>
+
+	</body>
+
+</html>
