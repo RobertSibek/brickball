@@ -36,7 +36,12 @@
 	var clBlue = 0;
 	var paddle_color = "rgba(" + clRed + "," + clGreen + "," + clBlue + ", 0.5)";
 	var brickGrid = new Array(BRICK_COLS * BRICK_ROWS);
-	var isPlaying = false;	
+	var isPlaying = false;
+	
+	// Load Sounds
+	var sfxPaddleHit = new Audio('sounds/hit.wav');
+	var sfxBallLoose = new Audio('sounds/loose.wav');
+	var sfxBrickHit = new Audio('sounds/brick_hit.wav');
 	
 </script>		
 

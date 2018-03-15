@@ -19,6 +19,7 @@ function noBricksLeft() {
 
 function removeBrick(brickIndex) {
 	brickGrid[brickIndex] = false;
+	sfxBrickHit.play();
 }
 
 function rowColToArrayIndex(col, row) {

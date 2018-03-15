@@ -56,6 +56,7 @@ function ballPaddleHandling() {
 		var centerOfPaddleX = paddleX + PADDLE_WIDTH / 2;
 		var ballDistFromPaddleCenterX = ballX - centerOfPaddleX
 		ballSpeedX = ballDistFromPaddleCenterX * 0.15
+		sfxPaddleHit.play();
 	}
 	if (noBricksLeft()) {
 		brickReset();
@@ -88,6 +89,7 @@ function ballMove() {
 		ballSpeedX *= -1
 	}
 	if (ballY > canvas.height) {
+		sfxBallLoose.play();
 		ballReset();
 	}
 	if (ballY < 0 && ballSpeedY < 0.0) {
