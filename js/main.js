@@ -35,7 +35,7 @@ var isGameOver = true;
 var sfxPaddleHit = new Audio("sounds/hit.wav");
 var sfxBallLoose = new Audio("sounds/loose.wav");
 var sfxBrickHit = new Audio("sounds/brick_hit.wav");
-var sfxEndMusic = new Audio("sounds/Komiku_-_70_-_Ending.mp3");
+var sfxEndMusic = new Audio("sounds/EndMusic.wav");
 
 window.onload = function () {
 	canvas = document.createElement("canvas");
