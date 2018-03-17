@@ -13,9 +13,10 @@ const BALL_RADIUS = 10;
 const BALL_STARTING_SPEED = 1;
 const START_LIFES = 3;
 const MENU_WIDTH = 30;
+const MENU_FONT = "20px Avenir";
 
 // Variables
-var canvas, canvasContext;
+var canvas, ctx;
 var ballSpeedX = BALL_STARTING_SPEED;
 var ballSpeedY = BALL_STARTING_SPEED;
 var paddleX = (CANVAS_WIDTH / 2) - PADDLE_WIDTH / 2;
@@ -30,12 +31,43 @@ var paddle_color = "rgba(" + clRed + "," + clGreen + "," + clBlue + ", 0.5)";
 var brickGrid = new Array(BRICK_COLS * BRICK_ROWS);
 var isPlaying = false;
 var isGameOver = true;
+var enableSounds = true;
 
-// Load Sounds
 var sfxPaddleHit = new Audio("sounds/hit.wav");
 var sfxBallLoose = new Audio("sounds/loose.wav");
 var sfxBrickHit = new Audio("sounds/brick_hit.wav");
 var sfxEndMusic = new Audio("sounds/EndMusic.wav");
+var sfxEnabled = true;
+
+	class Sound {
+
+		brickHit() {
+			if (sfxEnabled) {
+				sfxBrickHit.play();
+			}
+		}
+
+		ballLoose() {
+			if (sfxEnabled) {
+				sfxBallLoose.play();
+			}
+		}
+
+		paddleHit() {
+			if (sfxEnabled) {
+				sfxPaddleHit.play();
+			}
+		}
+
+		gameOver() {
+			if (sfxEnabled) {
+				sfxEndMusic.play();
+			}
+		}
+	}
+
+  var sfx = new Sound();
+
 
 window.onload = function () {
 	canvas = document.createElement("canvas");
@@ -48,9 +80,7 @@ window.onload = function () {
 
 	var body = document.getElementsByTagName("body")[0];
 	body.appendChild(canvas);
-
-	//	canvas = document.getElementById("game");
-	canvasContext = canvas.getContext("2d");
+	ctx = canvas.getContext("2d");
 	var fps = 30;
 	setInterval(updateAll, 100 / fps);
 	canvas.addEventListener("mousemove", updateMousePos);
@@ -83,23 +113,38 @@ function startGame() {
 	if (!isPlaying) {
 		isPlaying = true;
 		isGameOver = false;
-		//		lifes = START_LIFES;
 	}
 }
 
 function gameOver() {
-	sfxEndMusic.play();
+	sfx.gameOver();
+	ballReset();
 	isGameOver = true;
 	isPlaying = false;
-	
 }
 
-function updateLifes() {
+function ballReset() {
+	ballX = canvas.width / 2;
+	ballY = CANVAS_HEIGHT - PADDLE_DIST_FROM_EDGE - PADDLE_THICKNESS - 5;
+	
+	if (!isGameOver) {
+		ballSpeedX = BALL_STARTING_SPEED;
+		ballSpeedY = BALL_STARTING_SPEED;
+		isPlaying = false;
+	}
+}
+
+function looseLife() {
 	if (lifes > 0) {
 		lifes -= 1;
+		sfx.ballLoose();
+	}
 	
-	} else {		
+	if (lifes === 0)
+	{
 		gameOver();
+	} else {
+		ballReset();
 	}
 }
 
@@ -111,10 +156,13 @@ function moveAll() {
 
 function drawMenu() {
 	colorRect(0, 0, CANVAS_WIDTH, MENU_WIDTH, "red");
+	ctx.strokeStyle = "black";
+	ctx.fillStyle = "black";
+	ctx.font = MENU_FONT;
+	ctx.fillText("Lifes: " + lifes, CANVAS_WIDTH / 2, 22, 600);
 }
 
 function drawAll() {
-	// Draw Background
 	colorRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, "black");
 	drawMenu();
 	colorCircle(ballX, ballY, BALL_RADIUS, "white");
@@ -180,28 +228,20 @@ function ballPaddleHandling() {
 		var centerOfPaddleX = paddleX + PADDLE_WIDTH / 2;
 		var ballDistFromPaddleCenterX = ballX - centerOfPaddleX;
 		ballSpeedX = ballDistFromPaddleCenterX * 0.15;
-		sfxPaddleHit.play();
+		sfx.paddleHit();
 	}
 	if (noBricksLeft()) {
 		brickReset();
 	}
 }
 
-function ballReset() {
-	ballX = canvas.width / 2;
-	ballY = CANVAS_HEIGHT - PADDLE_DIST_FROM_EDGE - PADDLE_THICKNESS - 5;
-	ballSpeedX = BALL_STARTING_SPEED;
-	ballSpeedY = BALL_STARTING_SPEED;
-	isPlaying = false;
-}
-
 function ballMove() {
 
 	if (isPlaying) {
-		ballX += ballSpeedX;
-		ballY -= ballSpeedY;
+			ballX += ballSpeedX;
+			ballY -= ballSpeedY;
 	} else {
-		ballX = paddleX + PADDLE_WIDTH / 2;
+			ballX = paddleX + PADDLE_WIDTH / 2;
 	}
 
 
@@ -212,9 +252,7 @@ function ballMove() {
 		ballSpeedX *= -1;
 	}
 	if (ballY > canvas.height) {
-		sfxBallLoose.play();
-		updateLifes();
-		ballReset();
+		looseLife();
 	}
 	if (ballY < 0 && ballSpeedY < 0.0) {
 		ballSpeedY *= -1;
@@ -242,7 +280,7 @@ function noBricksLeft() {
 
 function removeBrick(brickIndex) {
 	brickGrid[brickIndex] = false;
-	sfxBrickHit.play();
+	sfx.brickHit();
 }
 
 function rowColToArrayIndex(col, row) {
@@ -272,21 +310,21 @@ function brickReset() {
 
 // Draw Paddle
 function paddleRect(x, y, width, height, color) {
-	canvasContext.fillStyle = color;
-	canvasContext.strokeStyle = "white";
-	canvasContext.fillRect(x, y, width, height);
-	canvasContext.strokeRect(x, y, width, height);
+	ctx.fillStyle = color;
+	ctx.strokeStyle = "white";
+	ctx.fillRect(x, y, width, height);
+	ctx.strokeRect(x, y, width, height);
 }
 
 // Common graphics
 function colorRect(x, y, width, height, color) {
-	canvasContext.fillStyle = color;
-	canvasContext.fillRect(x, y, width, height);
+	ctx.fillStyle = color;
+	ctx.fillRect(x, y, width, height);
 }
 
 function colorCircle(x, y, radius, color) {
-	canvasContext.fillStyle = color;
-	canvasContext.beginPath();
-	canvasContext.arc(x, y, radius, 0, Math.PI * 2, true);
-	canvasContext.fill();
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+	ctx.fill();
 }
