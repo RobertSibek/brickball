@@ -14,6 +14,7 @@ const BALL_STARTING_SPEED = 1;
 const START_LIFES = 3;
 const MENU_WIDTH = 30;
 const MENU_FONT = "20px Avenir";
+const MENU_Y_POSITION = 22;
 
 // Variables
 var canvas, ctx;
@@ -154,12 +155,26 @@ function moveAll() {
 	ballPaddleHandling();
 }
 
+function countBricksLeft() {
+	var totalBricks = 0;
+	for (var x = 0; x < brickGrid.length; x++) {
+		if (brickGrid[x]) {
+			totalBricks++;
+		}
+	}
+	
+	return totalBricks;
+}
+
 function drawMenu() {
 	colorRect(0, 0, CANVAS_WIDTH, MENU_WIDTH, "red");
 	ctx.strokeStyle = "black";
 	ctx.fillStyle = "black";
 	ctx.font = MENU_FONT;
-	ctx.fillText("Lifes: " + lifes, CANVAS_WIDTH / 2, 22, 600);
+	const MENU_SPACER = "               ";
+	var textString = "Bricks Left: " + countBricksLeft() + MENU_SPACER + "Lifes: " + lifes;
+	var textWidth = Math.round(ctx.measureText(textString).width);
+	ctx.fillText(textString, (CANVAS_WIDTH / 2) - Math.round(textWidth / 2), MENU_Y_POSITION, 600);
 }
 
 function drawAll() {
