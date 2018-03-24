@@ -37,7 +37,7 @@ var enableSounds = true;
 var sfxPaddleHit = new Audio("sounds/hit.wav");
 var sfxBallLoose = new Audio("sounds/loose.wav");
 var sfxBrickHit = new Audio("sounds/brick_hit.wav");
-var sfxEndMusic = new Audio("sounds/EndMusic.wav");
+var sfxEndMusic = new Audio("sounds/EndMusic.mp3");
 var sfxEnabled = true;
 
 	class Sound {
