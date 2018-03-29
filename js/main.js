@@ -11,7 +11,7 @@ const BRICK_ROWS = 14;
 const BRICK_GAP = 2;
 const BALL_RADIUS = 10;
 const BALL_STARTING_SPEED = 1;
-const START_LIFES = 3;
+const START_lives = 3;
 const MENU_WIDTH = 30;
 const MENU_FONT = "20px Avenir";
 const MENU_Y_POSITION = 22;
@@ -27,7 +27,7 @@ var mouseX;
 var clRed = 255;
 var clGreen = 0;
 var clBlue = 0;
-var lifes = START_LIFES;
+var lives = START_lives;
 var paddle_color = "rgba(" + clRed + "," + clGreen + "," + clBlue + ", 0.5)";
 var brickGrid = new Array(BRICK_COLS * BRICK_ROWS);
 var isPlaying = false;
@@ -136,12 +136,12 @@ function ballReset() {
 }
 
 function looseLife() {
-	if (lifes > 0) {
-		lifes -= 1;
+	if (lives > 0) {
+		lives -= 1;
 		sfx.ballLoose();
 	}
 	
-	if (lifes === 0)
+	if (lives === 0)
 	{
 		gameOver();
 	} else {
@@ -172,7 +172,7 @@ function drawMenu() {
 	ctx.fillStyle = "black";
 	ctx.font = MENU_FONT;
 	const MENU_SPACER = "               ";
-	var textString = "Bricks Left: " + countBricksLeft() + MENU_SPACER + "Lifes: " + lifes;
+	var textString = "Bricks Left: " + countBricksLeft() + MENU_SPACER + "Lives: " + lives;
 	var textWidth = Math.round(ctx.measureText(textString).width);
 	ctx.fillText(textString, (CANVAS_WIDTH / 2) - Math.round(textWidth / 2), MENU_Y_POSITION, 600);
 }
